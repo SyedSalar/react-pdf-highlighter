@@ -47,10 +47,10 @@ const HighlightPopup = ({
 const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021.pdf";
 const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
 
-const searchParams = new URLSearchParams(document.location.search);
+const searchParams = new URLSearchParams(window.location.search);
 
 const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
-
+console.log(initialUrl);
 class App extends Component<{}, State> {
   state = {
     url: initialUrl,
@@ -58,6 +58,10 @@ class App extends Component<{}, State> {
       ? [...testHighlights[initialUrl]]
       : [],
   };
+  // state = {
+  //   url: "",
+  //   highlights: [],
+  // };
 
   resetHighlights = () => {
     this.setState({
@@ -67,7 +71,7 @@ class App extends Component<{}, State> {
 
   toggleDocument = () => {
     const newUrl =
-      this.state.url === PRIMARY_PDF_URL ? SECONDARY_PDF_URL : PRIMARY_PDF_URL;
+      this.state.url === initialUrl ? initialUrl : PRIMARY_PDF_URL ? SECONDARY_PDF_URL : PRIMARY_PDF_URL;
 
     this.setState({
       url: newUrl,
@@ -75,7 +79,7 @@ class App extends Component<{}, State> {
     });
   };
 
-  scrollViewerTo = (highlight: any) => {};
+  scrollViewerTo = (highlight: any) => { };
 
   scrollToHighlightFromHash = () => {
     const highlight = this.getHighlightById(parseIdFromHash());
@@ -86,6 +90,22 @@ class App extends Component<{}, State> {
   };
 
   componentDidMount() {
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const urlParam = searchParams.get("url");
+    const docName = searchParams.get("docName");
+    console.log(urlParam);
+    if (urlParam) {
+      this.setState({
+        url: urlParam,
+        highlights: testHighlights[urlParam] ? [...testHighlights[urlParam]] : [],
+      });
+    }
+
+    // Assuming you want to do something with the user's name
+    console.log("Document's name:", docName);
+
+
     window.addEventListener(
       "hashchange",
       this.scrollToHighlightFromHash,
@@ -122,11 +142,11 @@ class App extends Component<{}, State> {
         } = h;
         return id === highlightId
           ? {
-              id,
-              position: { ...originalPosition, ...position },
-              content: { ...originalContent, ...content },
-              ...rest,
-            }
+            id,
+            position: { ...originalPosition, ...position },
+            content: { ...originalContent, ...content },
+            ...rest,
+          }
           : h;
       }),
     });

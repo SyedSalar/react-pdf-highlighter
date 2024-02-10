@@ -44,7 +44,7 @@ export class Tip extends Component<Props, State> {
               this.setState({ compact: false });
             }}
           >
-            Add highlight
+            Add comment
           </div>
         ) : (
           <form
@@ -69,7 +69,7 @@ export class Tip extends Component<Props, State> {
                 }}
               />
               <div>
-                {["💩", "😱", "😍", "🔥", "😳", "⚠️"].map((_emoji) => (
+                {["✅", "❌", "⚠️"].map((_emoji) => (
                   <label key={_emoji}>
                     <input
                       checked={emoji === _emoji}
