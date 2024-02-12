@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
 import {
   PdfLoader,
@@ -22,6 +23,9 @@ const testHighlights: Record<string, Array<IHighlight>> = _testHighlights;
 interface State {
   url: string;
   highlights: Array<IHighlight>;
+  docName: string | null; // Add docName to the state interface
+  user: string | null;
+
 }
 
 const getNextId = () => String(Math.random()).slice(2);
@@ -51,12 +55,28 @@ const searchParams = new URLSearchParams(window.location.search);
 
 const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
 console.log(initialUrl);
+const saveHighlightToBackend = async (highlight: NewHighlight, docName: string | null) => {
+  try {
+    // Make API call to your backend
+    const response = await axios.post("http://127.0.0.1:8083/api/documents/comments", { highlight, docName }, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Highlight saved to backend:", response.data);
+  } catch (error) {
+    console.error("Error saving highlight:", error);
+  }
+};
 class App extends Component<{}, State> {
   state = {
     url: initialUrl,
     highlights: testHighlights[initialUrl]
       ? [...testHighlights[initialUrl]]
       : [],
+    docName: null, // Initialize docName in the state object
+    user: null
+
   };
   // state = {
   //   url: "",
@@ -94,11 +114,14 @@ class App extends Component<{}, State> {
     const searchParams = new URLSearchParams(window.location.search);
     const urlParam = searchParams.get("url");
     const docName = searchParams.get("docName");
+    const user = searchParams.get("user");
     console.log(urlParam);
     if (urlParam) {
       this.setState({
         url: urlParam,
         highlights: testHighlights[urlParam] ? [...testHighlights[urlParam]] : [],
+        docName: docName,
+        user: user
       });
     }
 
@@ -123,6 +146,8 @@ class App extends Component<{}, State> {
     const { highlights } = this.state;
 
     console.log("Saving highlight", highlight);
+    saveHighlightToBackend(highlight, this.state.docName);
+
 
     this.setState({
       highlights: [{ ...highlight, id: getNextId() }, ...highlights],
@@ -151,7 +176,23 @@ class App extends Component<{}, State> {
       }),
     });
   }
+  updateHighlightComment = (highlightId: string, newComment: string) => {
+    console.log("Updating highlight comment", highlightId, newComment);
 
+    this.setState({
+      highlights: this.state.highlights.map((h) => {
+        return h.id === highlightId
+          ? {
+            ...h,
+            comment: {
+              ...h.comment,
+              text: newComment,
+            },
+          }
+          : h;
+      }),
+    });
+  };
   render() {
     const { url, highlights } = this.state;
 
@@ -214,6 +255,7 @@ class App extends Component<{}, State> {
                       isScrolledTo={isScrolledTo}
                       position={highlight.position}
                       comment={highlight.comment}
+
                     />
                   ) : (
                     <AreaHighlight
