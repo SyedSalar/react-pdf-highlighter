@@ -39,7 +39,6 @@ export function Sidebar({
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
         <h2 style={{ marginBottom: "1rem" }}>Novacon PDF Viewer</h2>
-
         <p>
           <small>
             To create area highlight hold ⌥ Option key (Alt), then click and
@@ -49,48 +48,53 @@ export function Sidebar({
       </div>
 
       <ul className="sidebar__highlights">
-        {highlights.map((highlight, index) => (
-          <li
-            key={index}
-            className="sidebar__highlight"
-            onClick={() => {
-              updateHash(highlight);
-            }}
-          >
-            <div>
-              <strong>{highlight.comment.text}</strong>
-              {highlight.content.text ? (
-                <blockquote style={{ marginTop: "0.5rem" }}>
-                  {`${highlight.content.text.slice(0, 90).trim()}…`}
-                </blockquote>
-              ) : null}
-              {highlight.content.image ? (
-                <div
-                  className="highlight__image"
-                  style={{ marginTop: "0.5rem" }}
-                >
-                  <img src={highlight.content.image} alt={"Screenshot"} />
-                </div>
-              ) : null}
-            </div>
-            <div className="highlight__location">
-              Page {highlight.position.pageNumber}
-            </div>
-            {replyingTo?.id === highlight.id ? (
+        {highlights.map((highlight, index) => {
+          console.log("Highlight:", highlight); // Console.log each highlight
+          return (
+            <li
+              key={index}
+              className="sidebar__highlight"
+              onClick={() => {
+                updateHash(highlight);
+              }}
+            >
               <div>
-                <textarea
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  placeholder="Enter your reply..."
-                  style={{ marginTop: "0.5rem" }}
-                ></textarea>
-                <button onClick={submitReply}>Submit</button>
+                <strong>{highlight.comment.text}</strong>
+                {highlight.content.text ? (
+                  <blockquote style={{ marginTop: "0.5rem" }}>
+                    {`${highlight.content.text.slice(0, 90).trim()}…`}
+                  </blockquote>
+                ) : null}
+                {highlight.content.image ? (
+                  <div
+                    className="highlight__image"
+                    style={{ marginTop: "0.5rem" }}
+                  >
+                    <img src={highlight.content.image} alt={"Screenshot"} />
+                  </div>
+                ) : null}
               </div>
-            ) : (
-              <button onClick={() => replyToHighlight(highlight)}>Reply</button>
-            )}
-          </li>
-        ))}
+              <div className="highlight__location">
+                Page {highlight.position.pageNumber}
+              </div>
+              {replyingTo?.id === highlight.id ? (
+                <div>
+                  <textarea
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    placeholder="Enter your reply..."
+                    style={{ marginTop: "0.5rem" }}
+                  ></textarea>
+                  <button onClick={submitReply}>Submit</button>
+                </div>
+              ) : (
+                <button onClick={() => replyToHighlight(highlight)}>
+                  Reply
+                </button>
+              )}
+            </li>
+          );
+        })}
       </ul>
       <div style={{ padding: "1rem" }}>
         <button onClick={toggleDocument}>Toggle PDF document</button>

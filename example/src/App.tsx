@@ -12,13 +12,13 @@ import {
 
 import type { IHighlight, NewHighlight } from "./react-pdf-highlighter";
 
-import { testHighlights as _testHighlights } from "./test-highlights";
+import { fetchHighlights, testHighlights } from "./test-highlights";
 import { Spinner } from "./Spinner";
 import { Sidebar } from "./Sidebar";
 
 import "./style/App.css";
 
-const testHighlights: Record<string, Array<IHighlight>> = _testHighlights;
+// const testHighlights: Record<string, Array<IHighlight>> = _testHighlights;
 
 interface State {
   url: string;
@@ -58,7 +58,9 @@ console.log(initialUrl);
 const saveHighlightToBackend = async (highlight: NewHighlight, docName: string | null) => {
   try {
     // Make API call to your backend
-    const response = await axios.post("http://127.0.0.1:8083/api/documents/comments", { highlight, docName }, {
+    const comments = highlight;
+
+    const response = await axios.post("http://127.0.0.1:8083/api/documents/comments", { comments, docName }, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -109,7 +111,7 @@ class App extends Component<{}, State> {
     }
   };
 
-  componentDidMount() {
+  async componentDidMount() {
 
     const searchParams = new URLSearchParams(window.location.search);
     const urlParam = searchParams.get("url");
@@ -117,12 +119,20 @@ class App extends Component<{}, State> {
     const user = searchParams.get("user");
     console.log(urlParam);
     if (urlParam) {
+      await fetchHighlights();
+
       this.setState({
         url: urlParam,
         highlights: testHighlights[urlParam] ? [...testHighlights[urlParam]] : [],
         docName: docName,
-        user: user
+        user: user,
       });
+      // this.setState({
+      //   url: urlParam,
+      //   highlights: testHighlights[urlParam] ? [...testHighlights[urlParam]] : [],
+      //   docName: docName,
+      //   user: user
+      // });
     }
 
     // Assuming you want to do something with the user's name
