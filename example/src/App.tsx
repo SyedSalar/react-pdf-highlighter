@@ -55,16 +55,17 @@ const searchParams = new URLSearchParams(window.location.search);
 
 const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
 console.log(initialUrl);
-const saveHighlightToBackend = async (highlight: NewHighlight, docName: string | null) => {
+const saveHighlightToBackend = async (highlight: IHighlight, docName: string | null) => {
   try {
-    // Make API call to your backend
-    const comments = highlight;
-
-    const response = await axios.post("http://127.0.0.1:8083/api/documents/comments", { comments, docName }, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.post(
+      "http://127.0.0.1:8083/api/documents/comments",
+      { comments: highlight, docName },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     console.log("Highlight saved to backend:", response.data);
   } catch (error) {
     console.error("Error saving highlight:", error);
@@ -77,7 +78,7 @@ class App extends Component<{}, State> {
       ? [...testHighlights[initialUrl]]
       : [],
     docName: null, // Initialize docName in the state object
-    user: null
+    user: ''
 
   };
   // state = {
@@ -117,7 +118,7 @@ class App extends Component<{}, State> {
     const urlParam = searchParams.get("url");
     const docName = searchParams.get("docName");
     const user = searchParams.get("user");
-    console.log(urlParam);
+    console.log(user);
     if (urlParam) {
       await fetchHighlights();
 
@@ -152,16 +153,30 @@ class App extends Component<{}, State> {
     return highlights.find((highlight) => highlight.id === id);
   }
 
-  addHighlight(highlight: NewHighlight) {
+  async addHighlight(highlight: NewHighlight) {
     const { highlights } = this.state;
 
-    console.log("Saving highlight", highlight);
-    saveHighlightToBackend(highlight, this.state.docName);
+    const id = getNextId();
+    const reply = '';
+    const replyBy = '';
 
+    let commentBy = '';
+    if (this.state.user) {
+      const users = this.state.user.split(' ');
+      commentBy = users[1];
+    }
+    // Extend NewHighlight to IHighlight by adding an id
+    const highlightWithId: IHighlight = { ...highlight, id, reply, commentBy, replyBy };
 
+    // Add the highlight to the state
     this.setState({
-      highlights: [{ ...highlight, id: getNextId() }, ...highlights],
+      highlights: [highlightWithId, ...highlights],
     });
+
+    console.log("Check highlight", { highlightWithId });
+
+    console.log("Saving highlight", highlightWithId);
+    saveHighlightToBackend(highlightWithId, this.state.docName);
   }
 
   updateHighlight(highlightId: string, position: Object, content: Object) {
@@ -212,6 +227,8 @@ class App extends Component<{}, State> {
           highlights={highlights}
           resetHighlights={this.resetHighlights}
           toggleDocument={this.toggleDocument}
+          docName={this.state.docName}
+          user={this.state.user}
         />
         <div
           style={{
