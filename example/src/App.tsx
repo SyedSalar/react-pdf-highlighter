@@ -25,6 +25,8 @@ interface State {
   highlights: Array<IHighlight>;
   docName: string | null; // Add docName to the state interface
   user: string | null;
+  allowed: string | null;
+
 
 }
 
@@ -78,7 +80,8 @@ class App extends Component<{}, State> {
       ? [...testHighlights[initialUrl]]
       : [],
     docName: null, // Initialize docName in the state object
-    user: ''
+    user: '',
+    allowed: null
 
   };
   // state = {
@@ -118,7 +121,8 @@ class App extends Component<{}, State> {
     const urlParam = searchParams.get("url");
     const docName = searchParams.get("docName");
     const user = searchParams.get("user");
-    console.log(user);
+    const allowed = searchParams.get('allowed');
+    console.log(user, 'allowed', allowed);
     if (urlParam) {
       await fetchHighlights();
 
@@ -127,6 +131,7 @@ class App extends Component<{}, State> {
         highlights: testHighlights[urlParam] ? [...testHighlights[urlParam]] : [],
         docName: docName,
         user: user,
+        allowed: allowed
       });
       // this.setState({
       //   url: urlParam,
@@ -177,6 +182,7 @@ class App extends Component<{}, State> {
 
     console.log("Saving highlight", highlightWithId);
     saveHighlightToBackend(highlightWithId, this.state.docName);
+
   }
 
   updateHighlight(highlightId: string, position: Object, content: Object) {
@@ -256,11 +262,17 @@ class App extends Component<{}, State> {
                   transformSelection
                 ) => (
                   <Tip
+
                     onOpen={transformSelection}
                     onConfirm={(comment) => {
-                      this.addHighlight({ content, position, comment });
+                      if (this.state.allowed == 'true') {
+                        this.addHighlight({ content, position, comment });
+
+                      }
+
 
                       hideTipAndSelection();
+
                     }}
                   />
                 )}
