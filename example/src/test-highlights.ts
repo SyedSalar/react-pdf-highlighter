@@ -19,7 +19,11 @@ export const fetchHighlights = async (): Promise<void> => {
       throw new Error("docName is not provided");
     }
 
+<<<<<<< HEAD
     const response = await axios.get(`http://127.0.0.1:8083/api/documents/comments?docName=${docName}&user=${user}`, {
+=======
+    const response = await axios.get(`http://54.81.250.98:8083/api/documents/comments?docName=${docName}`, {
+>>>>>>> 01c2059cf8ac58b94f13f476e72d33a7e54a5610
       headers: {
         "Content-Type": "application/json",
       },

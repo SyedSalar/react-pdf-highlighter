@@ -5,7 +5,7 @@ module.exports = {
   server: {
     protocol: "http-get",
     command: "npm run dev",
-    host: "127.0.0.1",
+    host: "0.0.0.0",
     port: 3000,
     launchTimeout: 10000,
     waitOnScheme: {

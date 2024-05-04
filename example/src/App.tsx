@@ -67,8 +67,13 @@ const saveHighlightToBackend = async (highlight: IHighlight, docName: string | n
       Inhouse = "1"
     }
     const response = await axios.post(
+<<<<<<< HEAD
       "http://127.0.0.1:8083/api/documents/comments",
       { comments: highlight, docName, Inhouse },
+=======
+      "http://54.81.250.98:8083/api/documents/comments",
+      { comments: highlight, docName },
+>>>>>>> 01c2059cf8ac58b94f13f476e72d33a7e54a5610
       {
         headers: {
           "Content-Type": "application/json",
