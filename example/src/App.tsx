@@ -1,14 +1,7 @@
 import React, { Component } from "react";
 import axios from 'axios';
 
-import {
-  PdfLoader,
-  PdfHighlighter,
-  Tip,
-  Highlight,
-  Popup,
-  AreaHighlight,
-} from "./react-pdf-highlighter";
+import { PdfLoader, PdfHighlighter, Tip, Highlight, Popup, AreaHighlight, } from "./react-pdf-highlighter";
 
 import type { IHighlight, NewHighlight } from "./react-pdf-highlighter";
 
@@ -56,12 +49,26 @@ const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
 const searchParams = new URLSearchParams(window.location.search);
 
 const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
+const userId = searchParams.get("user");
+console.log(userId, "userId");
+
+// const initialUrl = searchParams.get("url")
 console.log(initialUrl);
+
 const saveHighlightToBackend = async (highlight: IHighlight, docName: string | null) => {
   try {
+    let Inhouse = null
+    console.log(userId, "userId", typeof (userId));
+
+    if (userId == "1") {
+      Inhouse = "0"
+    }
+    else {
+      Inhouse = "1"
+    }
     const response = await axios.post(
       "http://127.0.0.1:8083/api/documents/comments",
-      { comments: highlight, docName },
+      { comments: highlight, docName, Inhouse },
       {
         headers: {
           "Content-Type": "application/json",
@@ -249,7 +256,7 @@ class App extends Component<{}, State> {
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
                 onScrollChange={resetHash}
-                // pdfScaleValue="page-width"
+                pdfScaleValue="page-width"
                 scrollRef={(scrollTo) => {
                   this.scrollViewerTo = scrollTo;
 
@@ -326,6 +333,13 @@ class App extends Component<{}, State> {
               />
             )}
           </PdfLoader>
+          <Sidebar
+            highlights={highlights}
+            resetHighlights={this.resetHighlights}
+            toggleDocument={this.toggleDocument}
+            docName={this.state.docName}
+            user={this.state.user}
+          />
         </div>
       </div>
     );
