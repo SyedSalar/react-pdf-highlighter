@@ -333,13 +333,13 @@ class App extends Component<{}, State> {
               />
             )}
           </PdfLoader>
-          <Sidebar
+          {/* <Sidebar
             highlights={highlights}
             resetHighlights={this.resetHighlights}
             toggleDocument={this.toggleDocument}
             docName={this.state.docName}
             user={this.state.user}
-          />
+          /> */}
         </div>
       </div>
     );
