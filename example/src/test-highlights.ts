@@ -3,7 +3,6 @@ import { IHighlight } from './react-pdf-highlighter';
 const searchParams = new URLSearchParams(window.location.search);
 const urlParam = searchParams.get("url");
 const docName = searchParams.get("docName");
-const user = searchParams.get("user");
 
 export interface TestHighlights {
   [key: string]: IHighlight[];
