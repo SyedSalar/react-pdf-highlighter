@@ -18,7 +18,11 @@ export const fetchHighlights = async (): Promise<void> => {
       throw new Error("docName is not provided");
     }
 
-    const response = await axios.get(`http://54.81.250.98:8083/api/documents/comments?docName=${docName}`, {
+// <<<<<<< HEAD
+    const response = await axios.get(`http://54.81.250.98:8083/api/documents/comments?docName=${docName}&user=${user}`, {
+// =======
+//     const response = await axios.get(`http://54.81.250.98:8083/api/documents/comments?docName=${docName}`, {
+// >>>>>>> 01c2059cf8ac58b94f13f476e72d33a7e54a5610
       headers: {
         "Content-Type": "application/json",
       },
@@ -29,7 +33,8 @@ export const fetchHighlights = async (): Promise<void> => {
       testHighlights[urlParam] = response.data;
     } else {
       console.error("URL parameter is not provided.");
-    }  } catch (error) {
+    }  
+  } catch (error) {
     console.error("Error loading highlights:", error);
     throw error; // Re-throw the error to be handled by the caller
   }
