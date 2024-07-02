@@ -19,10 +19,10 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "(cd ./example && vite)",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:copy-styles && npm run build:example",
+    "build": "npm run build:esm && npm run build:cjs && npm run build:copy-styles && npm run build:example",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir ./dist/cjs",
-    "build:copy-styles": "cp -r ./src/style ./dist/esm; cp -r ./src/style ./dist/cjs",
+    "build:copy-styles": "copy -r ./src/style ./dist/esm; copy -r ./src/style ./dist/cjs",
     "build:example": "(cd ./example && tsc && vite build)",
     "test": "tsc && npm run format:check && BROWSER=none jest --maxWorkers=1 -c jest.config.js",
     "format": "prettier --write './**/*.{js,ts,tsx}'",
