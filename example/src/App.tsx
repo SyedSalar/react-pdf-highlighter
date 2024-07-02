@@ -49,26 +49,35 @@ const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
 const searchParams = new URLSearchParams(window.location.search);
 
 const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
-const userId = searchParams.get("user");
-console.log(userId, "userId");
+console.log(initialUrl, 'init url');
+const pattern = /(\d+(\.\d+)?)(?=\.pdf)/;
+const match = initialUrl.match(pattern);
+export const version = match[1];
 
-// const initialUrl = searchParams.get("url")
-console.log(initialUrl);
+// Assume searchParams is already defined, e.g., from URLSearchParams
+const userId = searchParams.get("user")?.split(" ");
+const roleId = userId ? userId[0] : null;
+console.log(userId, "User");
+
+// let inhouse = 1;
+
+// if (roleId === "6") {
+//   inhouse = 0;
+// }
+
+// If you want to ensure inhouse is always either 0 or 1, you can use a type alias
+type InhouseType = 0 | 1;
+let inhouse: InhouseType = 1;
+
+if (roleId === "6") {
+  inhouse = 0;
+}
 
 const saveHighlightToBackend = async (highlight: IHighlight, docName: string | null) => {
   try {
-    let Inhouse = null
-    console.log(userId, "userId", typeof (userId));
-
-    if (userId == "1") {
-      Inhouse = "0"
-    }
-    else {
-      Inhouse = "1"
-    }
     const response = await axios.post(
       "http://54.81.250.98:8083/api/documents/comments",
-      { comments: highlight, docName, Inhouse },
+      { comments: highlight, docName, Inhouse: inhouse, version },
       {
         headers: {
           "Content-Type": "application/json",
