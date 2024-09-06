@@ -68,22 +68,7 @@ export class Tip extends Component<Props, State> {
                   }
                 }}
               />
-              <div>
-                {["✅", "❌", "⚠️"].map((_emoji) => (
-                  <label key={_emoji}>
-                    <input
-                      checked={emoji === _emoji}
-                      type="radio"
-                      name="emoji"
-                      value={_emoji}
-                      onChange={(event) =>
-                        this.setState({ emoji: event.target.value })
-                      }
-                    />
-                    {_emoji}
-                  </label>
-                ))}
-              </div>
+
             </div>
             <div>
               <input type="submit" value="Save" />
