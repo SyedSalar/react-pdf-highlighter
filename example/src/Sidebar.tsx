@@ -334,6 +334,8 @@ const saveHighlightReplyToBackend = async (highlight: IHighlight, docName: strin
 
 const ResolvedToBackend = async (highlight: IHighlight, docName: string | null, user: string) => {
   try {
+    console.log('ResolvedToBackendResolvedToBackend');
+
     const response = await axios.post(
       "http://127.0.0.1:8083/api/documents/resolved",
       { user, comments: highlight, docName },
@@ -349,7 +351,7 @@ const ResolvedToBackend = async (highlight: IHighlight, docName: string | null, 
     );
     console.log("Highlight saved to backend:", response.data);
     window.location.reload();
-    // fetchHighlights()
+    await fetchHighlights()
     console.log("yaha tk pocha");
 
   } catch (error) {
