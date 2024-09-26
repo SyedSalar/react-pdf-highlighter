@@ -76,7 +76,7 @@ if (roleId === "6") {
 const saveHighlightToBackend = async (highlight: IHighlight, docName: string | null) => {
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8083/api/documents/comments",
+      "http://54.81.250.98:8083/api/documents/comments",
       { comments: highlight, docName, Inhouse: inhouse, version },
       {
         headers: {

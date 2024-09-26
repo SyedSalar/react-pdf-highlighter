@@ -18,17 +18,17 @@
 //   document.location.hash = `highlight-${highlight.id}`;
 // };
 // const handleBack = () => {
-//   window.location.href = "http://127.0.0.1:8083/pages/document-assessment";
+//   window.location.href = "http://54.81.250.98:8083/pages/document-assessment";
 
 // }
 // const saveHighlightReplyToBackend = async (highlight: IHighlight, docName: string | null, user: string) => {
 //   try {
 //     const response = await axios.put(
 //       // <<<<<<< HEAD
-//       "http://127.0.0.1:8083/api/documents/comments",
+//       "http://54.81.250.98:8083/api/documents/comments",
 //       { user, comments: highlight, docName },
 //       // =======
-//       // "http://127.0.0.1:8083/api/documents/comments",
+//       // "http://54.81.250.98:8083/api/documents/comments",
 //       // { comments: highlight, docName },
 //       // >>>>>>> 01c2059cf8ac58b94f13f476e72d33a7e54a5610
 //       {
@@ -311,10 +311,10 @@ const saveHighlightReplyToBackend = async (highlight: IHighlight, docName: strin
 
     const response = await axios.put(
       // <<<<<<< HEAD
-      "http://127.0.0.1:8083/api/documents/comments",
+      "http://54.81.250.98:8083/api/documents/comments",
       { user, comments: highlight, docName },
       // =======
-      // "http://127.0.0.1:8083/api/documents/comments",
+      // "http://54.81.250.98:8083/api/documents/comments",
       // { comments: highlight, docName },
       // >>>>>>> 01c2059cf8ac58b94f13f476e72d33a7e54a5610
       {
@@ -337,10 +337,10 @@ const ResolvedToBackend = async (highlight: IHighlight, docName: string | null, 
     console.log('ResolvedToBackendResolvedToBackend');
 
     const response = await axios.post(
-      "http://127.0.0.1:8083/api/documents/resolved",
+      "http://54.81.250.98:8083/api/documents/resolved",
       { user, comments: highlight, docName },
       // =======
-      // "http://127.0.0.1:8083/api/documents/comments",
+      // "http://54.81.250.98:8083/api/documents/comments",
       // { comments: highlight, docName },
       // >>>>>>> 01c2059cf8ac58b94f13f476e72d33a7e54a5610
       {
