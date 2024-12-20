@@ -9,6 +9,9 @@ export default defineConfig({
   plugins: [reactRefresh()],
   server: {
     port: 3002,
-    host:'0.0.0.0'
+    host:'0.0.0.0',
+    hmr: {
+      clientPort: 80,
+    },
   },
 });
