@@ -11,10 +11,7 @@ export default defineConfig({
     port: 3002,
     host:'0.0.0.0',
     hmr: {
-      host: 'pdf.monit.pk',
-
-      protocol: 'wss',
-      clientPort: 3002
+      path: 'ws',
     },
   },
 });
